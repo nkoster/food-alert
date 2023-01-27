@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Text, View, TouchableOpacity, StyleSheet, Vibration, FlatList} from 'react-native'
+import {Text, View, TouchableOpacity, StyleSheet, Vibration, FlatList, ScrollView} from 'react-native'
 import { Camera } from 'expo-camera';
 
 export default function App() {
@@ -33,12 +33,12 @@ export default function App() {
     fetch(`https://world.openfoodfacts.org/api/v0/product/${data}.json`)
       .then(response => response.json())
       .then(data => {
-        if (!data.product) {
-          setIngredients('');
-          // setText('No product found');
-          return;
-        }
-        setIngredients(JSON.stringify(data.product.nutriments || []));
+        // if (!data.product) {
+        //   setIngredients('');
+        //   // setText('No product found');
+        //   return;
+        // }
+        setIngredients(JSON.stringify(data || []));
         // setIngredients(data.product.categories_tags || []);
         console.log('DATA',JSON.stringify(data, null, 2));
       })
@@ -58,7 +58,9 @@ export default function App() {
           {/*  data={ingredients}*/}
           {/*  renderItem={({ item }) => <Text>{item}</Text>}*/}
           {/*/> : <Text>No ingredients found</Text>}*/}
-          <Text>{ingredients}</Text>
+          {scanned &&<ScrollView style={styles.scrollview}>
+            <Text>{ingredients}</Text>
+          </ScrollView>}
         </View>
       </View>
       <Camera
@@ -153,5 +155,11 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: '100%',
     zIndex: 1000,
+  },
+  scrollview: {
+    position: 'relative',
+    width: '100%',
+    zIndex: 1000,
+    maxHeight: '90%',
   }
 });
