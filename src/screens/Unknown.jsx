@@ -31,36 +31,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     flexDirection: 'column',
   },
-  title: {
-    // fontSize: 20,
-    alignItems: 'center',
-    width: '100%',
-  },
-  titleText: {
-    fontSize: 20,
-  },
-  flatList: {
-    width: '100%',
-  },
-  flatListItem: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    paddingTop: 10,
-    paddingBottom: 10,
-  },
-  keyText: {
-    fontSize: 20,
-    paddingLeft: 50,
-    maxWidth: '70%',
-  },
-  valueText: {
-    fontSize: 20,
-    paddingRight: 50,
-  },
   button: {
     alignItems: 'center',
     width: '100%',
+    paddingBottom: 60,
   }
 })

@@ -6,9 +6,12 @@ import {Context} from '../context/ProductContext';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function Home() {
+
+  const scanningText = 'scanning bar code...';
+
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [text, setText] = useState('Scanning...');
+  const [text, setText] = useState(scanningText);
   const [unknown, setUnknown] = useState(false);
   const {update} = useContext(Context);
 
@@ -90,10 +93,10 @@ export default function Home() {
             style={styles.scanButton}
             onPress={() => {
               setScanned(false)
-              setText('Scanning...')
+              setText(scanningText)
             }}
           >
-            <Text style={styles.scanButtonText}>{scanned ? 'scan bar code' : 'scanning bar code...'}</Text>
+            <Text style={styles.scanButtonText}>{scanned ? 'scan bar code' : scanningText}</Text>
           </TouchableOpacity>
         </View>
       </Camera>

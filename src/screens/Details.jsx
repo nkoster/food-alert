@@ -47,12 +47,20 @@ function Details() {
           />
         </View>
       </View>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Home')}
-      >
-        <Text>Home</Text>
-      </TouchableOpacity>
+      <View style={styles.buttons}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('Home')}
+        >
+          <Text>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('Unknown')}
+        >
+          <Text>Raw</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -97,5 +105,11 @@ const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     width: '100%',
+  },
+  buttons: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-around',
+    flexDirection: 'row',
   }
 })
