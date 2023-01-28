@@ -1,4 +1,4 @@
-import {Text, StyleSheet, TouchableOpacity, View, ScrollView} from 'react-native'
+import {Text, StyleSheet, TouchableOpacity, View, FlatList} from 'react-native'
 import {useNavigation} from '@react-navigation/native'
 import {Context} from '../context/ProductContext';
 import React, {useContext} from 'react'
@@ -12,17 +12,22 @@ function Details() {
     navigation.navigate('Home')
   }
 
-  const text = state.product_name + '\n' +
-    JSON.stringify(state._keywords, null, 2) + '\n' +
-    JSON.stringify(state.allergens_tags, null, 2) + '\n' +
-    JSON.stringify(state.nutriments, null, 2) + '\n'
-  console.log('STATE', state);
+  const nutriments =  Object.entries(state.nutriments)
+    .filter((key) => key[0].includes('_100g'))
+  console.log(nutriments.length, Object.entries(state.nutriments).length);
+  console.log('NUTRIENTS', JSON.stringify(nutriments, null, 2));
+
+  // const text = state.product_name
+    // JSON.stringify(state._keywords, null, 2) + '\n' +
+    // JSON.stringify(state.allergens_tags, null, 2) + '\n'
+    // JSON.stringify(nutriments, null, 2) + '\n'
+  console.log('STATE', state.nutriments);
 
   return (
-    <View>
-      <Text style={styles.text}>
-        {state.product_name}
-      </Text>
+    <View style={styles.container}>
+      <View style={styles.title}>
+        <Text style={styles.titleText}>{state.product_name}</Text>
+      </View>
       <View style={styles.status}>
         {/*<Text style={styles.statusText}>{text}</Text>*/}
         <View style={styles.flatList}>
@@ -30,13 +35,23 @@ function Details() {
           {/*  data={ingredients}*/}
           {/*  renderItem={({ item }) => <Text>{item}</Text>}*/}
           {/*/> : <Text>No ingredients found</Text>}*/}
-          <ScrollView style={styles.scrollview}>
-            <Text>{text}</Text>
-          </ScrollView>
+          <FlatList
+            style={styles.flatList}
+            data={nutriments}
+            renderItem={({item}) => (
+              <View style={styles.flatListItem}>
+                <Text style={styles.keyText}>{item[0].split('_')[0]}</Text>
+                <Text style={styles.valueText}>{item[1]}</Text>
+              </View>
+            )}
+          />
         </View>
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-        <Text>Go to Home Screen</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('Home')}
+      >
+        <Text>Home</Text>
       </TouchableOpacity>
     </View>
   );
@@ -45,7 +60,42 @@ function Details() {
 export default Details
 
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 30,
+  container: {
+    flex: 1,
+    // display: 'flex',
+    justifyContent: 'space-around',
+    flexDirection: 'column',
+  },
+  title: {
+    // fontSize: 20,
+    alignItems: 'center',
+    width: '100%',
+  },
+  titleText: {
+    fontSize: 20,
+  },
+  flatList: {
+    width: '100%',
+  },
+  flatListItem: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  keyText: {
+    fontSize: 20,
+    paddingLeft: 50,
+    maxWidth: '70%',
+  },
+  valueText: {
+    fontSize: 20,
+    paddingRight: 50,
+  },
+  button: {
+    alignItems: 'center',
+    width: '100%',
   }
 })

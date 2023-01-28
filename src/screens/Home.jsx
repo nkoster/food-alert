@@ -1,15 +1,16 @@
 import React, {useContext, useEffect, useState} from 'react'
-import {Text, View, TouchableOpacity, StyleSheet, Vibration, FlatList, ScrollView} from 'react-native'
+import {Text, View, TouchableOpacity, StyleSheet, Vibration} from 'react-native'
 import { Camera } from 'expo-camera';
 import { useNavigation } from '@react-navigation/native';
 import {Context} from '../context/ProductContext';
+import { Ionicons } from '@expo/vector-icons';
+
 export default function Home() {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  // const [scanning, setScanning] = useState(false);
-  const [text, setText] = useState('No barcode scanned');
-  const [ingredients, setIngredients] = useState('');
-  const {state, update} = useContext(Context);
+  const [text, setText] = useState('Scanning...');
+  const [unknown, setUnknown] = useState(false);
+  const {update} = useContext(Context);
 
   const navigation = useNavigation()
 
@@ -32,17 +33,10 @@ export default function Home() {
     setScanned(true);
     const t = `type: ${type}\ndata: ${data}`
     setText(t)
-    // setScanning(false)
     console.log(t);
     fetch(`https://world.openfoodfacts.org/api/v0/product/${data}.json`)
       .then(response => response.json())
       .then(data => {
-        // if (!data.product) {
-        //   setIngredients('');
-        //   // setText('No product found');
-        //   return;
-        // }
-
         /*
         information about data:
         data.product._keywords holds product keywords in an array
@@ -50,20 +44,16 @@ export default function Home() {
         data.product.categories_tags holds categories in an array (if available)
         */
         if (data.product) {
-          setIngredients(
-            data.product.product_name + '\n' +
-            JSON.stringify(data.product._keywords, null, 2) + '\n' +
-            JSON.stringify(data.product.allergens_tags, null, 2) + '\n' +
-            JSON.stringify(data.product.nutriments, null, 2) + '\n'
-          );
           update(data.product);
+          setUnknown(false);
           navigation.navigate('Details');
+        } else {
+          update(data);
+          setUnknown(true);
+          navigation.navigate('Unknown');
         }
-        // setIngredients(data.product.categories_tags || []);
-        // console.log('DATA',JSON.stringify(data.product, null, 2));
       })
       .catch(error => {
-        setIngredients('');
         setText('Bar code lookup failed');
         console.error(error);
       });
@@ -72,38 +62,38 @@ export default function Home() {
   return (
     <View style={styles.container}>
       <View style={styles.status}>
-        <TouchableOpacity onPress={() => navigation.navigate('Details')}>
+        <TouchableOpacity
+          style={styles.statusButton}
+          onPress={() => {
+          if (unknown) {
+            navigation.navigate('Unknown')
+          } else {
+            navigation.navigate('Details');
+          }
+        }}>
           <Text style={styles.statusText}>{text}</Text>
+          {scanned
+            ? !unknown
+              ? <Ionicons name="ios-arrow-forward" size={32} color="black" />
+              : <Ionicons name="ios-arrow-forward" size={32} color="red" />
+            : null
+          }
         </TouchableOpacity>
-        <View style={styles.flatList}>
-          {/*{ingredients.length > 0 ? <FlatList*/}
-          {/*  data={ingredients}*/}
-          {/*  renderItem={({ item }) => <Text>{item}</Text>}*/}
-          {/*/> : <Text>No ingredients found</Text>}*/}
-          {/*{scanned && <ScrollView style={styles.scrollview}>*/}
-          {/*  <Text>{ingredients}</Text>*/}
-          {/*</ScrollView>}*/}
-        </View>
       </View>
       <Camera
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
       >
-        <View style={styles.layerTop} />
-        <View style={styles.layerCenter}>
-          <View style={styles.layerLeft} />
-          <View style={styles.focused} />
-          <View style={styles.layerRight} />
-        </View>
-        <View style={styles.layerBottom}>
+        <View style={scanned ? styles.scanButtonView : styles.scanButtonViewDisabled}>
           <TouchableOpacity
-            style={styles.button}
+            disabled={!scanned}
+            style={styles.scanButton}
             onPress={() => {
               setScanned(false)
               setText('Scanning...')
             }}
           >
-            <Text>Scan Again</Text>
+            <Text style={styles.scanButtonText}>{scanned ? 'scan bar code' : 'scanning bar code...'}</Text>
           </TouchableOpacity>
         </View>
       </Camera>
@@ -117,11 +107,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    // display: 'flex',
-    // flexDirection: 'column',
-    // backgroundColor: '#fff',
-    // alignItems: 'center',
-    // justifyContent: 'center',
   },
   layerTop: {
     flex: 1,
@@ -156,17 +141,45 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     zIndex: 1001,
   },
-  button: {
+  statusButton: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  scanButtonView: {
+    position: 'absolute',
+    bottom: 40,
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  scanButtonViewDisabled: {
+    position: 'absolute',
+    bottom: 40,
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    opacity: 0.5,
+  },
+  scanButton: {
+    width: '70%',
     alignItems: 'center',
     backgroundColor: '#DDDDDD',
     padding: 10,
     zIndex: 1001,
+    borderRadius: 25,
+  },
+  scanButtonText: {
+    fontSize: 20,
+    padding: 5,
   },
   status: {
     position: 'relative',
     top: 40,
-    // left: 100,
-    // right: 100,
     width: '100%',
     zIndex: 1000,
     display: 'flex',
