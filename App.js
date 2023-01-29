@@ -16,7 +16,7 @@ export default function App() {
         <Stack.Navigator initialRouteName='Home'>
           <Stack.Screen name='Home' component={Home} options={{ title: 'Home'}}/>
           <Stack.Screen name='Details' component={Details} options={{ title: 'Details'}}/>
-          <Stack.Screen name='Unknown' component={Unknown} options={{ title: 'Unknown'}}/>
+          <Stack.Screen name='Unknown' component={Unknown} options={{ title: 'Raw'}}/>
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
