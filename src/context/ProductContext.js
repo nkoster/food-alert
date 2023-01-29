@@ -1,4 +1,5 @@
 import createDataContext from './createDataContext'
+import {saveProduct} from '../api'
 
 const productReducer = (state, action) => {
     switch(action.type) {
@@ -11,6 +12,7 @@ const productReducer = (state, action) => {
 
 const update = dispatch => (product) => {
     dispatch({ type: 'update', payload: product })
+    saveProduct(product)
 }
 
 export const { Provider, Context } = createDataContext(
