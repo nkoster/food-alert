@@ -4,6 +4,7 @@ import { Camera } from 'expo-camera';
 import { useNavigation } from '@react-navigation/native';
 import {Context} from '../context/ProductContext';
 import { Ionicons } from '@expo/vector-icons';
+import {getProduct} from '../api'
 
 export default function Home() {
 
@@ -31,35 +32,22 @@ export default function Home() {
     return <Text>No access to camera</Text>;
   }
 
-  const handleBarCodeScanned = ({ type, data }) => {
+  const handleBarCodeScanned = async ({ type, data }) => {
     Vibration.vibrate();
     setScanned(true);
     setUnknown(false);
     const t = `type: ${type}\ndata: ${data}`
     setText(t)
     console.log(t);
-    fetch(`https://world.openfoodfacts.org/api/v0/product/${data}.json`)
-      .then(response => response.json())
-      .then(data => {
-        /*
-        information about data:
-        data.product._keywords holds product keywords in an array
-        data.product.allergens_tags holds allergens in an array
-        data.product.categories_tags holds categories in an array (if available)
-        */
-        if (data.product) {
-          update(data.product);
-          navigation.navigate('Details');
-        } else {
-          update(data);
-          setUnknown(true);
-          navigation.navigate('Unknown');
-        }
-      })
-      .catch(error => {
-        setText('Bar code lookup failed');
-        console.error(error);
-      });
+    const productData = await getProduct(data)
+    if (productData.product) {
+      update(productData.product);
+      navigation.navigate('Details');
+    } else {
+      update(productData);
+      setUnknown(true);
+      navigation.navigate('Unknown');
+    }
   };
 
   return (

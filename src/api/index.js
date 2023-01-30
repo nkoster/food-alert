@@ -20,6 +20,12 @@ export async function saveProduct(product) {
     }
   }
 
-  await fetcher()
+  console.log(await fetcher());
 
+}
+
+export async function getProduct(productCode) {
+  console.log('getProduct', productCode);
+  const response = await fetch(`https://world.openfoodfacts.org/api/v0/product/${productCode}.json`);
+  return await response.json();
 }
