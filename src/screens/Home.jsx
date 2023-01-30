@@ -34,6 +34,7 @@ export default function Home() {
   const handleBarCodeScanned = ({ type, data }) => {
     Vibration.vibrate();
     setScanned(true);
+    setUnknown(false);
     const t = `type: ${type}\ndata: ${data}`
     setText(t)
     console.log(t);
@@ -48,7 +49,6 @@ export default function Home() {
         */
         if (data.product) {
           update(data.product);
-          setUnknown(false);
           navigation.navigate('Details');
         } else {
           update(data);
