@@ -8,33 +8,32 @@ function Details() {
 
   const {state} = useContext(Context);
 
-  if (!state.product_name) {
+  if (!state) {
     navigation.navigate('Home')
+  } else {
+    if (!state.product_name) {
+      navigation.navigate('Home')
+    }
+  }
+
+  if (state.status === 0) {
+    navigation.navigate('Unknown')
+  }
+
+  if (!state.nutriments) {
+    navigation.navigate('Unknown')
   }
 
   const nutriments =  Object.entries(state.nutriments)
     .filter((key) => key[0].includes('_100g'))
-  console.log(nutriments.length, Object.entries(state.nutriments).length);
-  console.log('NUTRIENTS', JSON.stringify(nutriments, null, 2));
-
-  // const text = state.product_name
-    // JSON.stringify(state._keywords, null, 2) + '\n' +
-    // JSON.stringify(state.allergens_tags, null, 2) + '\n'
-    // JSON.stringify(nutriments, null, 2) + '\n'
-  console.log('STATE', state.nutriments);
-
+``
   return (
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.titleText}>{state.product_name}</Text>
       </View>
       <View style={styles.status}>
-        {/*<Text style={styles.statusText}>{text}</Text>*/}
         <View style={styles.flatList}>
-          {/*{ingredients.length > 0 ? <FlatList*/}
-          {/*  data={ingredients}*/}
-          {/*  renderItem={({ item }) => <Text>{item}</Text>}*/}
-          {/*/> : <Text>No ingredients found</Text>}*/}
           <FlatList
             style={styles.flatList}
             data={nutriments}

@@ -12,8 +12,7 @@ export default function Home() {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [text, setText] = useState(scanningText);
-  const [unknown, setUnknown] = useState(false);
-  const {update} = useContext(Context);
+  const {state, update} = useContext(Context);
 
   const navigation = useNavigation()
 
@@ -48,11 +47,9 @@ export default function Home() {
         */
         if (data.product) {
           update(data.product);
-          setUnknown(false);
           navigation.navigate('Details');
         } else {
           update(data);
-          setUnknown(true);
           navigation.navigate('Unknown');
         }
       })
@@ -68,7 +65,7 @@ export default function Home() {
         <TouchableOpacity
           style={styles.statusButton}
           onPress={() => {
-          if (unknown) {
+          if (state.status === 0) {
             navigation.navigate('Unknown')
           } else {
             navigation.navigate('Details');
@@ -76,9 +73,9 @@ export default function Home() {
         }}>
           <Text style={styles.statusText}>{text}</Text>
           {scanned
-            ? !unknown
-              ? <Ionicons name="ios-arrow-forward" size={32} color="black" />
-              : <Ionicons name="ios-arrow-forward" size={32} color="red" />
+            ? !state || state.status === 0
+              ? <Ionicons name="ios-arrow-forward" size={32} color="red" />
+              : <Ionicons name="ios-arrow-forward" size={32} color="black" />
             : null
           }
         </TouchableOpacity>
