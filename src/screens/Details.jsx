@@ -48,18 +48,22 @@ function Details() {
         </View>
       </View>
       <View style={styles.buttons}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate('Home')}
-        >
-          <Text>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate('Unknown')}
-        >
-          <Text>Raw</Text>
-        </TouchableOpacity>
+        <View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('Home')}
+          >
+            <Text>Home</Text>
+          </TouchableOpacity>
+        </View>
+        <View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('Unknown')}
+          >
+            <Text>Raw</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
