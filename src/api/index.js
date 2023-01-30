@@ -4,11 +4,6 @@ export function saveProduct(product) {
 
   console.log('saveProduct', productCode);
 
-  if (product.status === 0) {
-    console.log('No data for this product');
-    return;
-  }
-
   fetch(`https://foodproducts.w3b.net/product`, {
     method: "POST",
     headers: {
