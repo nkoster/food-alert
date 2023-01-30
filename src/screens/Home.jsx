@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react'
-import {Text, View, TouchableOpacity, StyleSheet, Vibration} from 'react-native'
+import {Text, View, TouchableOpacity, StyleSheet, Vibration, Button, ActivityIndicator} from 'react-native'
 import { Camera } from 'expo-camera';
 import { useNavigation } from '@react-navigation/native';
 import {Context} from '../context/ProductContext';
@@ -8,13 +8,13 @@ import {getProduct} from '../api'
 
 export default function Home() {
 
-  const scanningText = 'scanning bar code...';
+  const scanningText = 'scanning...';
 
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [text, setText] = useState(scanningText);
   const [unknown, setUnknown] = useState(false);
-  const {update} = useContext(Context);
+  const {state, update} = useContext(Context);
 
   const navigation = useNavigation()
 
@@ -56,14 +56,17 @@ export default function Home() {
         <TouchableOpacity
           style={styles.statusButton}
           onPress={() => {
-          if (unknown) {
-            navigation.navigate('Unknown')
-          } else {
-            navigation.navigate('Details');
-          }
-        }}>
+            if (state) {
+              if (unknown) {
+                navigation.navigate('Unknown')
+              } else {
+                navigation.navigate('Details');
+              }
+            }
+          }}
+        >
           <Text style={styles.statusText}>{text}</Text>
-          {scanned
+          {text !== scanningText && text !== 'cancelled'
             ? !unknown
               ? <Ionicons name="ios-arrow-forward" size={32} color="black" />
               : <Ionicons name="ios-arrow-forward" size={32} color="red" />
@@ -71,21 +74,35 @@ export default function Home() {
           }
         </TouchableOpacity>
       </View>
+      {!scanned && text !== scanningText
+        ? <View style={styles.scanningTextContainer}>
+          <View style={styles.scanningTextView}>
+            <ActivityIndicator size="small" color="black" />
+            <Text style={styles.scanningText}>{scanningText}</Text>
+          </View>
+        </View>: null}
       <Camera
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
       >
-        <View style={scanned ? styles.scanButtonView : styles.scanButtonViewDisabled}>
-          <TouchableOpacity
-            disabled={!scanned}
-            style={styles.scanButton}
-            onPress={() => {
-              setScanned(false)
-              setText(scanningText)
-            }}
-          >
-            <Text style={styles.scanButtonText}>{scanned ? 'scan bar code' : scanningText}</Text>
-          </TouchableOpacity>
+        <View style={styles.scanButtonView}>
+          <View style={styles.scanButton}>
+            {scanned
+              ? <Button
+                title={'scan bar code'}
+                onPress={() => {
+                  setScanned(false)
+                }}
+              />
+              : <Button
+                title={'cancel'}
+                onPress={() => {
+                  setScanned(true)
+                  if (text === scanningText ) setText('cancelled')
+                }}
+              />
+            }
+          </View>
         </View>
       </Camera>
     </View>
@@ -99,39 +116,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  layerTop: {
-    flex: 1,
-    backgroundColor: 'transparent',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1001,
-  },
-  layerCenter: {
-    flex: 1,
-    flexDirection: 'row',
-    zIndex: 1001,
-  },
-  layerLeft: {
-    flex: 1,
-    backgroundColor: 'transparent',
-    zIndex: 1001,
-  },
-  focused: {
-    flex: 10,
-  },
-  layerRight: {
-    flex: 1,
-    backgroundColor: 'transparent',
-    zIndex: 1001,
-  },
-  layerBottom: {
-    flex: 1,
-    backgroundColor: 'transparent',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    zIndex: 1001,
-  },
   statusButton: {
     width: '100%',
     display: 'flex',
@@ -141,47 +125,63 @@ const styles = StyleSheet.create({
   },
   scanButtonView: {
     position: 'absolute',
-    bottom: 40,
+    bottom: 90,
     width: '100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  scanButtonViewDisabled: {
-    position: 'absolute',
-    bottom: 40,
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    opacity: 0.5,
+    zIndex: 1001,
   },
   scanButton: {
-    width: '70%',
-    alignItems: 'center',
     backgroundColor: '#DDDDDD',
+    position: 'absolute',
+    width: '70%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 10,
     zIndex: 1001,
     borderRadius: 25,
   },
-  scanButtonText: {
-    fontSize: 20,
-    padding: 5,
-  },
   status: {
     position: 'relative',
-    top: 40,
     width: '100%',
     zIndex: 1000,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
-    backgroundColor: '#DDDDDD'
+    backgroundColor: '#DDDDDD',
   },
   statusText: {
     fontSize: 20,
     padding: 10,
+  },
+  scanningTextContainer: {
+    position: 'absolute',
+    top: 100,
+    width: '100%',
+    zIndex: 1001,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  scanningTextView: {
+    width: '45%',
+    opacity: 0.8,
+    borderRadius: 25,
+    zIndex: 1001,
+    backgroundColor: 'limegreen',
+    padding: 10,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    flexDirection: 'row',
+  },
+  scanningText: {
+    fontSize: 20,
+    // color: 'white',
+    paddingRight: 10,
   },
   flatList: {
     position: 'relative',
