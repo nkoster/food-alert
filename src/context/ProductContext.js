@@ -12,7 +12,7 @@ const productReducer = (state, action) => {
 
 const update = dispatch => (product) => {
     dispatch({ type: 'update', payload: product })
-    saveProduct(product)
+    saveProduct(product).catch(error => console.error(error))
 }
 
 export const { Provider, Context } = createDataContext(
