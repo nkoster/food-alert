@@ -1,4 +1,4 @@
-import {Text, StyleSheet, TouchableOpacity, View, FlatList} from 'react-native'
+import {Text, StyleSheet, View, FlatList, Button} from 'react-native'
 import {useNavigation} from '@react-navigation/native'
 import {Context} from '../context/ProductContext';
 import React, {useContext} from 'react'
@@ -23,6 +23,7 @@ function Details() {
       </View>
       <View style={styles.status}>
         <View style={styles.flatList}>
+          <Text style={styles.nutrimentsText}>nutriments per 100g</Text>
           <FlatList
             style={styles.flatList}
             data={nutriments}
@@ -37,20 +38,10 @@ function Details() {
       </View>
       <View style={styles.buttons}>
         <View>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('Home')}
-          >
-            <Text>Home</Text>
-          </TouchableOpacity>
+          <Button title={'Home'} onPress={() => navigation.navigate('Home')} />
         </View>
         <View>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('Unknown')}
-          >
-            <Text>Raw</Text>
-          </TouchableOpacity>
+          <Button title={'Raw'} onPress={() => navigation.navigate('Unknown')} />
         </View>
       </View>
     </View>
@@ -62,28 +53,33 @@ export default Details
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // display: 'flex',
     justifyContent: 'space-around',
     flexDirection: 'column',
   },
   title: {
-    // fontSize: 20,
     alignItems: 'center',
     width: '100%',
   },
   titleText: {
     fontSize: 20,
   },
+  nutrimentsText: {
+    fontSize: 20,
+    width: '100%',
+    textAlign: 'center',
+    paddingBottom: 30,
+  },
   flatList: {
     width: '100%',
+    paddingBottom: 30,
   },
   flatListItem: {
     width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
     flexDirection: 'row',
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingTop: 4,
+    paddingBottom: 4,
   },
   keyText: {
     fontSize: 20,
