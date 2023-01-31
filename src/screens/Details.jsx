@@ -38,7 +38,7 @@ function Details() {
       </View>
       <View style={styles.buttons}>
         <View>
-          <Button title={'Home'} onPress={() => navigation.navigate('Home')} />
+          <Button title={'Scanner'} onPress={() => navigation.navigate('Home')} />
         </View>
         <View>
           <Button title={'Raw'} onPress={() => navigation.navigate('Unknown')} />
@@ -80,6 +80,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingTop: 4,
     paddingBottom: 4,
+  },
+  ingredientsView: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   keyText: {
     fontSize: 20,
