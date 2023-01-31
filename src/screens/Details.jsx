@@ -34,6 +34,10 @@ function Details() {
               </View>
             )}
           />
+          {state.ingredients && <Button
+            title={'Ingredients'}
+            onPress={() => navigation.navigate('Ingredients')}
+          />}
         </View>
       </View>
       <View style={styles.buttons}>
