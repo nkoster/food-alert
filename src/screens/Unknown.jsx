@@ -1,4 +1,4 @@
-import {Text, StyleSheet, TouchableOpacity, View, ScrollView} from 'react-native'
+import {Text, StyleSheet, View, ScrollView, Button} from 'react-native'
 import {useNavigation} from '@react-navigation/native'
 import {Context} from '../context/ProductContext';
 import React, {useContext} from 'react'
@@ -12,12 +12,12 @@ function Unknown() {
       <ScrollView>
         <Text>{JSON.stringify(state, null, 2)}</Text>
       </ScrollView>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Home')}
-      >
-        <Text>Home</Text>
-      </TouchableOpacity>
+      <View style={styles.button}>
+        <Button
+          title="Scanner"
+          onPress={() => navigation.navigate('Home')}
+        />
+      </View>
     </View>
   );
 }
@@ -34,6 +34,6 @@ const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     width: '100%',
-    paddingBottom: 60,
+    paddingBottom: 20,
   }
 })
