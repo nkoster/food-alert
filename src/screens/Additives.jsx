@@ -15,7 +15,7 @@ export default function Additives() {
           data={additives}
           renderItem={({item}) => (
             <View style={styles.flatListItem}>
-              <Text style={styles.additiveText}>{item.split(':')[1]}</Text>
+              <Text style={styles.additiveText}>{item.split(':')[1].toUpperCase()}</Text>
             </View>
           )}
         />
