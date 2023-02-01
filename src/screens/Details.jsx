@@ -6,10 +6,18 @@ function Details() {
 
   const navigation = useNavigation()
 
-  const {state} = useContext(Context);
+  const {state, update} = useContext(Context);
 
   if (!state.product_name) {
-    navigation.navigate('Home')
+    setTimeout(() => {
+      if (state.product_name_en) {
+        update({...state, product_name: state.product_name_en})
+      } else if (state.product_name_nl) {
+        update({...state, product_name: state.product_name_nl})
+      } else {
+        update({...state, product_name: 'No product name'})
+      }
+    }, 100)
   }
 
   const nutriments =  Object.entries(state.nutriments)
