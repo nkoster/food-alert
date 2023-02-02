@@ -19,7 +19,7 @@ export default function Ingredients() {
           renderItem={({item, index}) => (
             <View style={index % 2 !== 0 ? styles.listItemOdd : styles.listItemEven}>
               <Text style={styles.itemText}>{item.text}</Text>
-              <Text style={styles.itemText}>
+              <Text style={styles.valueText}>
                 {Number(item.percent_estimate).toFixed(2)}%
               </Text>
             </View>
@@ -37,8 +37,6 @@ export default function Ingredients() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
-    // flexDirection: 'column',
   },
   list: {
     width: '80%',
@@ -50,7 +48,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#fafafa',
   },
   listItemEven: {
     width: '100%',
@@ -61,8 +59,18 @@ const styles = StyleSheet.create({
     // backgroundColor: 'red',
   },
   itemText: {
-    fontSize: 15,
-    padding: 3,
+    fontSize: 14,
+    fontWeight: 'bold',
+    padding: 4,
+    paddingLeft: 10,
+    paddingRight: 10,
+    maxWidth: '80%',
+    textTransform: 'lowercase',
+    overflow: 'hidden',
+  },
+  valueText: {
+    fontSize: 16,
+    padding: 4,
     paddingLeft: 10,
     paddingRight: 10,
   },
