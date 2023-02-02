@@ -37,26 +37,27 @@ function Details() {
   return (
     <View style={styles.container}>
       <View style={styles.title}>
-        <Text style={styles.titleText}>{state.product_name.toUpperCase()}</Text>
+        <Text style={styles.titleText}>{state.product_name}</Text>
       </View>
-      <View style={styles.status}>
-        <View style={styles.flatList}>
-          <Text style={styles.nutrimentsText}>nutriments per 100 gram</Text>
-          <FlatList
-            style={styles.flatList}
-            data={nutriments}
-            renderItem={({item, index}) => {
-              const key = item[0].split('_')[0]
-              const unit = state.nutriments[key + '_unit'] || ''
-              return (
-                <View style={index % 2 === 0 ? styles.flatListItemEven : styles.flatListItemOdd}>
-                  <Text style={styles.keyText}>{item[0].split('_')[0]}</Text>
-                  <Text style={styles.valueText}>{item[1]} {unit}</Text>
-                </View>
-              )
-            }}
-          />
-          <View style={styles.buttonsNav}>
+      <View style={styles.flatList}>
+        <Text style={styles.nutrimentsText}>nutriments per 100 gram</Text>
+        <FlatList
+          style={styles.flatList}
+          data={nutriments}
+          renderItem={({item, index}) => {
+            const key = item[0].split('_')[0]
+            const unit = state.nutriments[key + '_unit'] || ''
+            return (
+              <View style={index % 2 === 0 ? styles.flatListItemEven : styles.flatListItemOdd}>
+                <Text style={styles.keyText}>{item[0].split('_')[0]}</Text>
+                <Text style={styles.valueText}>{item[1]} {unit}</Text>
+              </View>
+            )
+          }}
+        />
+      </View>
+      <View style={styles.buttonsGroup}>
+        <View style={styles.buttonsNav}>
           {state.ingredients && <View>
             <Button
               title={'Ingredients'}
@@ -69,15 +70,14 @@ function Details() {
               onPress={() => navigation.navigate('Additives')}
             />
           </View>}
+        </View>
+        <View style={styles.buttonsBottom}>
+          <View>
+            <Button title={'Scanner'} onPress={() => navigation.navigate('Home')} />
           </View>
-        </View>
-      </View>
-      <View style={styles.buttonsBottom}>
-        <View>
-          <Button title={'Scanner'} onPress={() => navigation.navigate('Home')} />
-        </View>
-        <View>
-          <Button title={'Raw'} onPress={() => navigation.navigate('Unknown')} />
+          <View>
+            <Button title={'Raw'} onPress={() => navigation.navigate('Unknown')} />
+          </View>
         </View>
       </View>
     </View>
@@ -88,11 +88,15 @@ export default Details
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
+    height: '100%',
+    display: 'flex',
     justifyContent: 'space-around',
     flexDirection: 'column',
   },
   title: {
+    position: 'absolute',
+    top: 20,
     alignItems: 'center',
     width: '100%',
   },
@@ -101,16 +105,22 @@ const styles = StyleSheet.create({
     paddingRight: 12,
     fontSize: 14,
     fontWeight: 'bold',
+    textTransform: 'uppercase',
   },
   nutrimentsText: {
+    paddingTop: 20,
     fontSize: 20,
     width: '100%',
     textAlign: 'center',
     paddingBottom: 20,
   },
   flatList: {
+    position: 'absolute',
+    top: 60,
     width: '100%',
-    paddingBottom: 30,
+    // paddingB
+    //
+    // ottom: 30,
   },
   flatListItemOdd: {
     width: '100%',
@@ -136,10 +146,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   keyText: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: 'bold',
     paddingLeft: 20,
     maxWidth: '70%',
+    textTransform: 'lowercase',
   },
   valueText: {
     fontSize: 20,
@@ -149,11 +160,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
   },
+  buttonsGroup: {
+    position: 'absolute',
+    bottom: 40,
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-around',
+    flexDirection: 'column',
+  },
   buttonsNav: {
     width: '100%',
     display: 'flex',
     justifyContent: 'space-around',
     flexDirection: 'row',
+    paddingBottom: 20,
   },
   buttonsBottom: {
     width: '100%',
