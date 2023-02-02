@@ -1,15 +1,15 @@
 import {Text, StyleSheet, View, FlatList, Button} from 'react-native'
 import {useNavigation} from '@react-navigation/native'
 import {Context} from '../context/ProductContext';
-import React, {useContext} from 'react'
+import React, {useContext, useEffect} from 'react'
 function Details() {
 
   const navigation = useNavigation()
 
   const {state, update} = useContext(Context);
 
-  if (!state.product_name) {
-    setTimeout(() => {
+  useEffect(() =>{
+    if (!state.product_name) {
       if (state.product_name_en) {
         update({...state, product_name: state.product_name_en})
       } else if (state.product_name_nl) {
@@ -17,7 +17,15 @@ function Details() {
       } else {
         update({...state, product_name: 'No product name'})
       }
-    }, 100)
+    }
+  }, [])
+
+  if (!state.product_name) {
+    return <View style={styles.container}>
+      <View style={styles.title}>
+        <Text style={styles.titleText}>{'Loading...'}</Text>
+      </View>
+    </View>
   }
 
   const nutriments =  Object.entries(state.nutriments)
@@ -29,7 +37,7 @@ function Details() {
   return (
     <View style={styles.container}>
       <View style={styles.title}>
-        <Text style={styles.titleText}>{state.product_name}</Text>
+        <Text style={styles.titleText}>{state.product_name.toUpperCase()}</Text>
       </View>
       <View style={styles.status}>
         <View style={styles.flatList}>
@@ -85,7 +93,10 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   titleText: {
-    fontSize: 20,
+    paddingLeft: 12,
+    paddingRight: 12,
+    fontSize: 14,
+    fontWeight: 'bold',
   },
   nutrimentsText: {
     fontSize: 20,
@@ -104,7 +115,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingTop: 4,
     paddingBottom: 4,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#fafafa',
   },
   flatListItemEven: {
     width: '100%',
@@ -121,7 +132,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   keyText: {
-    fontSize: 20,
+    fontSize: 16,
     paddingLeft: 20,
     maxWidth: '70%',
   },
