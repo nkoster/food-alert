@@ -13,6 +13,7 @@ export default function Ingredients() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.list}>
       {state.ingredients
         ? <FlatList
           data={ingredients}
@@ -27,6 +28,7 @@ export default function Ingredients() {
           keyExtractor={(item) => item.id + Math.random()}
         />
         : <Text>no ingredients data available</Text>}
+      </View>
       <View style={styles.backButton}>
         <Button title={'Back'} onPress={() => navigation.navigate('Details')} />
       </View>
@@ -39,8 +41,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   list: {
-    width: '80%',
-    paddingBottom: 30,
+    height: '90%',
   },
   listItemOdd: {
     width: '100%',
