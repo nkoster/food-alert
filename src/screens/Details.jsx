@@ -41,16 +41,20 @@ function Details() {
       </View>
       <View style={styles.status}>
         <View style={styles.flatList}>
-          <Text style={styles.nutrimentsText}>nutriments per 100g</Text>
+          <Text style={styles.nutrimentsText}>nutriments per 100 gram</Text>
           <FlatList
             style={styles.flatList}
             data={nutriments}
-            renderItem={({item, index}) => (
-              <View style={index % 2 === 0 ? styles.flatListItemEven : styles.flatListItemOdd}>
-                <Text style={styles.keyText}>{item[0].split('_')[0]}</Text>
-                <Text style={styles.valueText}>{item[1]}</Text>
-              </View>
-            )}
+            renderItem={({item, index}) => {
+              const key = item[0].split('_')[0]
+              const unit = state.nutriments[key + '_unit'] || ''
+              return (
+                <View style={index % 2 === 0 ? styles.flatListItemEven : styles.flatListItemOdd}>
+                  <Text style={styles.keyText}>{item[0].split('_')[0]}</Text>
+                  <Text style={styles.valueText}>{item[1]} {unit}</Text>
+                </View>
+              )
+            }}
           />
           <View style={styles.buttonsNav}>
           {state.ingredients && <View>
