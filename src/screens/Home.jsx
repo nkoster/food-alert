@@ -4,7 +4,7 @@ import { Camera } from 'expo-camera';
 import { useNavigation } from '@react-navigation/native';
 import {Context} from '../context/ProductContext';
 import { Ionicons } from '@expo/vector-icons';
-import {getProduct} from '../api'
+import {getProduct, getProductW3B} from '../api'
 
 export default function Home() {
 
@@ -39,14 +39,21 @@ export default function Home() {
     const t = `type: ${type}\ndata: ${data}`
     setText(t)
     console.log(t);
-    const productData = await getProduct(data)
-    if (productData.product) {
-      update(productData.product);
+    let productData = await getProductW3B(data)
+    // console.log(productData.nutriments);
+    if (productData.nutriments) {
+      update(productData);
       navigation.navigate('Details');
     } else {
-      update(productData);
-      setUnknown(true);
-      navigation.navigate('Unknown');
+      productData = await getProduct(data)
+      if (productData.product) {
+        update(productData.product);
+        navigation.navigate('Details');
+      } else {
+        update(productData);
+        setUnknown(true);
+        navigation.navigate('Unknown');
+      }
     }
   };
 

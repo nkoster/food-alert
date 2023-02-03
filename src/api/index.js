@@ -38,6 +38,12 @@ export async function getProduct(productCode) {
 
 export async function getProductW3B(productCode) {
   console.log('getProductW3B', productCode);
-  const response = await fetch(`https://foodproducts.w3b.net/product/${productCode}.json`);
-  return await response.json();
+  let jsonObject = {};
+  try {
+    const response = await fetch(`https://foodproducts.w3b.net/product/${productCode}.json`);
+    jsonObject = await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+  return jsonObject;
 }
