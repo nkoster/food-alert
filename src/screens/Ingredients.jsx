@@ -9,7 +9,7 @@ export default function Ingredients() {
 
   const {state} = useContext(Context)
 
-  const ingredients = state.ingredients
+  const ingredients = state.ingredients.filter(item => item.percent_estimate !== 9.5367431640625e-05)
 
   return (
     <View style={styles.container}>
