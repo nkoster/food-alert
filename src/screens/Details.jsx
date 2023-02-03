@@ -30,6 +30,7 @@ function Details() {
 
   const nutriments =  Object.entries(state.nutriments)
     .filter((key) => key[0].includes('_100g'))
+    .filter((key) => key[0] !== 'energy')
   console.log(nutriments.length, Object.entries(state.nutriments).length);
 
   const additives = Array.isArray(state.additives_tags) ? state.additives_tags : [];
@@ -42,11 +43,13 @@ function Details() {
       <View style={styles.flatList}>
         <Text style={styles.nutrimentsText}>nutriments per 100 gram</Text>
         <FlatList
-          style={styles.flatList}
           data={nutriments}
           renderItem={({item, index}) => {
             const key = item[0].split('_')[0]
-            const unit = state.nutriments[key + '_unit'] || ''
+            let unit = state.nutriments[key + '_unit'] || ''
+            if (key === 'energy') {
+              unit = 'kJ'
+            }
             return (
               <View style={index % 2 === 0 ? styles.flatListItemEven : styles.flatListItemOdd}>
                 <Text style={styles.keyText}>{item[0].split('_')[0]}</Text>
@@ -88,11 +91,7 @@ export default Details
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     height: '100%',
-    display: 'flex',
-    justifyContent: 'space-around',
-    flexDirection: 'column',
   },
   title: {
     position: 'absolute',
@@ -108,19 +107,17 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   nutrimentsText: {
-    paddingTop: 20,
+    paddingTop: 24,
     fontSize: 20,
     width: '100%',
     textAlign: 'center',
-    paddingBottom: 20,
+    paddingBottom: 16,
   },
   flatList: {
     position: 'absolute',
-    top: 60,
+    top: 33,
     width: '100%',
-    // paddingB
-    //
-    // ottom: 30,
+    bottom: 130,
   },
   flatListItemOdd: {
     width: '100%',
@@ -173,7 +170,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'space-around',
     flexDirection: 'row',
-    paddingBottom: 20,
+    paddingBottom: 10,
   },
   buttonsBottom: {
     width: '100%',
