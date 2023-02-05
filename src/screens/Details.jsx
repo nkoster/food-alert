@@ -1,21 +1,22 @@
-import {Text, StyleSheet, View, FlatList, Button} from 'react-native'
-import {useNavigation} from '@react-navigation/native'
-import {Context} from '../context/ProductContext';
-import React, {useContext, useEffect} from 'react'
+import { Text, StyleSheet, View, FlatList, Button } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { Context } from '../context/ProductContext'
+import React, { useContext, useEffect } from 'react'
+
 function Details() {
 
   const navigation = useNavigation()
 
-  const {state, update} = useContext(Context);
+  const { state, update } = useContext(Context)
 
-  useEffect(() =>{
+  useEffect(() => {
     if (!state.product_name) {
       if (state.product_name_en) {
-        update({...state, product_name: state.product_name_en})
+        update({ ...state, product_name: state.product_name_en })
       } else if (state.product_name_nl) {
-        update({...state, product_name: state.product_name_nl})
+        update({ ...state, product_name: state.product_name_nl })
       } else {
-        update({...state, product_name: 'No product name'})
+        update({ ...state, product_name: 'No product name' })
       }
     }
   }, [])
@@ -28,12 +29,12 @@ function Details() {
     </View>
   }
 
-  const nutriments =  Object.entries(state.nutriments)
+  const nutriments = Object.entries(state.nutriments)
     .filter((key) => key[0].includes('_100g'))
     .filter((key) => key[0] !== 'energy')
-  console.log(nutriments.length, Object.entries(state.nutriments).length);
+  console.log(nutriments.length, Object.entries(state.nutriments).length)
 
-  const additives = Array.isArray(state.additives_tags) ? state.additives_tags : [];
+  const additives = Array.isArray(state.additives_tags) ? state.additives_tags : []
 
   return (
     <View style={styles.container}>
@@ -44,7 +45,7 @@ function Details() {
         <Text style={styles.nutrimentsText}>nutriments per 100 gram</Text>
         <FlatList
           data={nutriments}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             const key = item[0].split('_')[0]
             let unit = state.nutriments[key + '_unit'] || ''
             if (key === 'energy') {
@@ -84,7 +85,7 @@ function Details() {
         </View>
       </View>
     </View>
-  );
+  )
 }
 
 export default Details
@@ -177,5 +178,5 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'space-around',
     flexDirection: 'row',
-  }
+  },
 })
