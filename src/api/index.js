@@ -1,49 +1,48 @@
 export async function saveProduct(product) {
 
-  const productCode = product.code;
+  const productCode = product.code
 
-  console.log('saveProduct', productCode);
+  console.log('saveProduct', productCode)
 
   const fetcher = async () => {
     try {
       const response = await fetch(`https://foodproducts.w3b.net/product`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json"
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(product)
-      });
-      return await response.json();
-    }
-    catch (error) {
-      console.error(error);
+        body: JSON.stringify(product),
+      })
+      return await response.json()
+    } catch (error) {
+      console.error(error)
     }
   }
 
-  console.log(await fetcher());
+  console.log(await fetcher())
 
 }
 
 export async function getProduct(productCode) {
-  console.log('getProduct', productCode);
-  let jsonObject = {};
+  console.log('getProduct', productCode)
+  let jsonObject = {}
   try {
-    const response = await fetch(`https://world.openfoodfacts.org/api/v0/product/${productCode}.json`);
-    jsonObject = await response.json();
+    const response = await fetch(`https://world.openfoodfacts.org/api/v0/product/${productCode}.json`)
+    jsonObject = await response.json()
   } catch (error) {
-    console.error(error);
+    console.error(error)
   }
-  return jsonObject;
+  return jsonObject
 }
 
 export async function getProductW3B(productCode) {
-  console.log('getProductW3B', productCode);
-  let jsonObject = {};
+  console.log('getProductW3B', productCode)
+  let jsonObject = {}
   try {
-    const response = await fetch(`https://foodproducts.w3b.net/product/${productCode}.json`);
-    jsonObject = await response.json();
+    const response = await fetch(`https://foodproducts.w3b.net/product/${productCode}.json`)
+    jsonObject = await response.json()
   } catch (error) {
-    console.error(error);
+    console.error(error)
   }
-  return jsonObject;
+  return jsonObject
 }
